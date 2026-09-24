@@ -1,3 +1,14 @@
+'''
+This is a game to raise awareness of classroom phone distractions and it leads you through 4 years of high school in 4 levels
+Run this file to play the game
+
+Written by Thanh Cao
+
+Using pygame-ce
+
+License of Creative Common: GWHS Way to Graduate game by Thanh Cao is marked CC0 1.0 Universal
+'''
+
 import pygame
 from sys import exit
 import math
@@ -72,8 +83,8 @@ class Eagle(pygame.sprite.Sprite):
             pass
         if keys_released[pygame.K_UP]:
             self.jumped = False
-    def animation_handle(self):'''
-        self.image= pygame.image.load(self.show_image).convert_alpha()
+    def animation_handle(self):
+        '''self.image= pygame.image.load(self.show_image).convert_alpha()
         if self.rect.bottom < player_y_pos:
             self.show_image = self.image_jump
         else:
@@ -178,6 +189,7 @@ class QuoteBird(pygame.sprite.Sprite):
 #functions
 
 def spawn_stuff(stuff_speed, highest_y):
+    #to random stuffs by adding objects into group with different height on screen
     global can_spawn
     global last_spawn_time
     global distraction_in_arow
@@ -198,6 +210,7 @@ def spawn_stuff(stuff_speed, highest_y):
         return
 
 def spawn_a_row_stuff(stuff_speed, highest_y):
+    #to spawn many stuffs in a row and the height is decreased after each stuff spawned
     global can_spawn
     global last_spawn_time
     global distraction_in_arow
@@ -221,14 +234,17 @@ def spawn_a_row_stuff(stuff_speed, highest_y):
     
 
 def shoot_feather():
+    #spawn feather
     player_y = player.sprite.rect.y
     player_y = player_y + player.sprite.rect.height /2
     feather_group.add(Feather(player_y))
 
 
 def check_collisions():
+    #to check collide of groups
     global score
     global timer
+    #check if player touched stuff or barrier
     if player.sprite:
         collided_stuffs = pygame.sprite.spritecollide(player.sprite, stuff_group, True)
         for stuff in collided_stuffs:
@@ -250,6 +266,8 @@ def check_collisions():
             score -= 20
             score = max(0, score)
             barrier.destroy()
+
+    #check if feather touched barrier
     if feather_group.sprite:
         collided_barrier = pygame.sprite.spritecollide(feather_group.sprite, barrier_group, False)
         for barrier in collided_barrier:
@@ -310,6 +328,7 @@ def in_game_scene():
     display_score_and_timer()  
 
 def result_display():
+    #based on the score when game ended and show result scene
     global test_passed
     grade = ""
     text = ""
@@ -348,6 +367,7 @@ def result_display():
     screen.blit(commend_surf, commend_rect)
 
 def clear_group(group):
+    #clear objects in a group
     for child in group.sprites():
         child.kill()
     
@@ -411,6 +431,7 @@ def level_4():
             spawn_stuff(stuff_speed, highest_y)
 
 def reset_value():
+    #reset all values to start a new run
     global score
     global timer
     global game_scene
@@ -446,6 +467,7 @@ pygame.display.set_caption("How to Get Better Academic Performance")
 clock = pygame.time.Clock()
 start_font = pygame.font.Font(None, 50)
 
+    #groups
 player = pygame.sprite.GroupSingle()
 player.add(Eagle())
 
@@ -453,6 +475,7 @@ stuff_group = pygame.sprite.Group()
 feather_group = pygame.sprite.GroupSingle()
 barrier_group = pygame.sprite.Group()
 quote_group = pygame.sprite.Group()
+
 #load assets
 bg_sky = pygame.image.load("assets/sky.png").convert()
 bg_ground = pygame.image.load("assets/ground.png").convert()
@@ -461,7 +484,6 @@ start_scene = pygame.image.load("assets/start_scene.png").convert()
 end_scene = pygame.image.load("assets/end_scene.png").convert()
 introduce_scene_image = pygame.image.load("assets/level_1_introduce_1.png").convert()
 the_end_scene = pygame.image.load("assets/the_end_scene.png").convert()
-
 
     #buttons 
 start_button = pygame.image.load("assets/start_button.png").convert_alpha()
@@ -478,8 +500,8 @@ continue_button_start_rect = continue_button.get_rect(center = (screen_width/2, 
 continue_button_end_rect = continue_button.get_rect(center = (screen_width/2+250, screen_height-75))
 
 end_button = pygame.image.load("assets/end_button.png").convert_alpha()
-    #fonts
 
+    #fonts
 grade_font = pygame.font.Font(None, 60)
 grade_surf = grade_font.render("Grade: %s", True, (0,0,0))
 grade_rect = grade_surf.get_rect(center = (screen_width/2, screen_height/2)) 
