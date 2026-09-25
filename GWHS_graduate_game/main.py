@@ -1,13 +1,13 @@
 '''
 This is a game to raise awareness of classroom phone distractions and it leads you through 4 years of high school in 4 levels
-Run this file to play the game
-
-Written by Thanh Cao
 
 Using pygame-ce
 
 License of Creative Common: GWHS Way to Graduate game by Thanh Cao is marked CC0 1.0 Universal
+
 '''
+
+
 
 import pygame
 from sys import exit
@@ -463,7 +463,7 @@ player_y_pos = screen_height -120
 pygame.init()
 pygame.mixer.init()
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("How to Get Better Academic Performance")
+pygame.display.set_caption("GWHS Way to Graduate")
 clock = pygame.time.Clock()
 start_font = pygame.font.Font(None, 50)
 
