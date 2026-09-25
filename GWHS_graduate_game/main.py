@@ -171,7 +171,7 @@ class QuoteBird(pygame.sprite.Sprite):
         global quote_first_time
         self.image = pygame.image.load("assets/white_dove.png").convert_alpha()
         self.rect = self.image.get_rect(midleft = (screen_width+ 200, 100))
-        self.quotes = ["Be respectful", "Be responsible", "Be safe", "Fly Eagles!"]
+        self.quotes = ["Be respectful", "Be responsible", "Be safe", "Fly Eagles!", "Let's Join Clubs!", "Playing Sport"]
         self.random_quote = random.choice(self.quotes)
         self.font = pygame.font.Font(None, 40)
         if quote_first_time:
@@ -477,7 +477,7 @@ barrier_group = pygame.sprite.Group()
 quote_group = pygame.sprite.Group()
 
 #load assets
-bg_sky = pygame.image.load("assets/sky.png").convert()
+bg_sky = pygame.image.load("assets/frontside_1.png").convert()
 bg_ground = pygame.image.load("assets/ground.png").convert()
  
 start_scene = pygame.image.load("assets/start_scene.png").convert()
