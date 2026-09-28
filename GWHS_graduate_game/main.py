@@ -139,6 +139,7 @@ class Stuff(pygame.sprite.Sprite):
 
 class Feather(pygame.sprite.Sprite):
     def __init__(self, player_y_center):
+        #create feather when called
         super().__init__()
         self.image = pygame.image.load("assets/feather.png").convert_alpha()
         self.speed = 15
@@ -152,8 +153,8 @@ class Feather(pygame.sprite.Sprite):
         player.sprite.can_shoot = True
 
 class Barrier(pygame.sprite.Sprite):
-    #create barrier
     def __init__(self):
+         #create barrier when called
         super().__init__()
         self.text_list = ["Service\nLearning\nProject", "23.5\nCredits","Keystone\nExam", "CTE"]
         self.image = pygame.image.load("assets/barrier.png").convert_alpha()
@@ -175,6 +176,7 @@ class Barrier(pygame.sprite.Sprite):
         self.kill()
 
 class QuoteBird(pygame.sprite.Sprite):
+    #create bird when called
     def __init__(self):
         super().__init__()
         global quote_first_time
@@ -290,12 +292,15 @@ def check_collisions():
 
 
 def display_score_and_timer():
+    #calculate time in minute and second
     time_in_minute = int(timer/60)
     time_in_second = timer%60
 
+    
     score_surf = font.render("Score: "+ str(score), True, (0,0,0))
     score_rect = score_surf.get_rect(topleft=(50, 50))
 
+    #display timer in format "00:00" and score 
     timer_surf = font.render(str(time_in_minute) + ":"+str(f"{time_in_second:02}"), True, (0,0,0))
     timer_rect = timer_surf.get_rect(midtop =(screen_width/2, 50))
     screen.blit(score_surf, score_rect)
@@ -304,6 +309,7 @@ def display_score_and_timer():
 
 
 def in_game_scene():
+    #func for in game scene and will be ran inside loop when game is running
     global bg_scroll
     global quote_time_passed
     for i in range(0, bg_titles):
@@ -320,6 +326,7 @@ def in_game_scene():
     quote_group.draw(screen)
     quote_group.update()
 
+    #to check which level should be ran based on level variable
     match level:
         case 1:
             level_1()
@@ -379,7 +386,8 @@ def clear_group(group):
     #clear objects in a group
     for child in group.sprites():
         child.kill()
-    
+
+#level 1 scene
 def level_1():
     num_of_stuffs = 2
     highest_y = 300
@@ -390,7 +398,7 @@ def level_1():
     if not len(stuff_group)>num_of_stuffs and can_spawn == True:
         spawn_stuff(stuff_speed, highest_y)
 
-
+#level 2 scene
 def level_2():
     num_of_stuffs = 3
     highest_y = 350
@@ -400,7 +408,8 @@ def level_2():
     stuff_group.update()
     if not len(stuff_group)>num_of_stuffs and can_spawn == True:
         spawn_stuff(stuff_speed, highest_y)
-
+        
+#level 3 scene
 def level_3():
     num_of_stuffs = 3
     highest_y = 350
@@ -415,7 +424,7 @@ def level_3():
     else:
         if not len(stuff_group)>num_of_stuffs and can_spawn == True:
             spawn_stuff(stuff_speed, highest_y)
-
+#level 4 scene
 def level_4():
     global barrier_time_passed 
     num_of_stuffs = 3
@@ -525,8 +534,10 @@ fail_sound.set_volume(0.5)
 #variables
 level = 1
 grade_level = "9th"
-
+score = 0
 timer = 60
+
+    #control variables
 barrier_time_passed = 0
 quote_time_passed= 0
 quote_first_time = True
@@ -535,19 +546,20 @@ bg_scroll = 0
 bg_titles = math.ceil(screen_width/bg_sky.get_width())+1
 game_scene = 0
 introduce_scene = 0
-
-score = 0
 distraction_in_arow = 0
 
 game_end = False
 test_passed = False
 running = True
 
+# create event signal
 TIMER_EVENT = pygame.USEREVENT + 1
 TIMER_WALKING = pygame.USEREVENT + 2
 
 pygame.time.set_timer(TIMER_EVENT, 1000)
 pygame.time.set_timer(TIMER_WALKING, 250)
+
+    #control variables to make a gap between each time stuff spawned
 spawn_timer = 1000
 last_spawn_time = 0
 can_spawn = True
@@ -559,21 +571,32 @@ while running:
     current_time= pygame.time.get_ticks()
     if current_time - last_spawn_time >= spawn_timer:
         can_spawn = True
+
+    #check for events
     for event in pygame.event.get():
+        #to close program
         if event.type == pygame.QUIT:   
             running = False
+
+        #decrease the timer
         if event.type == TIMER_EVENT and game_scene == 1:
             if timer > 0:
                 timer -= 1
                 barrier_time_passed += 1
                 quote_time_passed += 1
-        '''if event.type == TIMER_WALKING and game_scene == 1:
+
+        
+        ''' handle the walking animation
+        if event.type == TIMER_WALKING and game_scene == 1:
             if player.sprite.walk_frame ==1 :
                 player.sprite.walk_frame = 2
             else:
                 player.sprite.walk_frame = 1'''
+
+        #On mouse clicked events
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
+                #start button, when clicked start the run
                 if start_button_rect.collidepoint(event.pos) and introduce_scene == 2:
                     player.add(Eagle(level))
                     running = True
@@ -591,18 +614,23 @@ while running:
                             timer = 30
                             player.sprite.can_shoot = True
                     introduce_scene = 0
+                #start continue button, when clicked change to next scene of intructions section
                 if continue_button_start_rect.collidepoint(event.pos) and not game_end:
                     introduce_scene += 1
                     introduce_scene_image = pygame.image.load("assets/level_%d_introduce_%d.png" %(level, introduce_scene))
+                #end continue button, when clicked go back to first scene and move on to next level
                 if continue_button_end_rect.collidepoint(event.pos) and test_passed and game_end and level < 4:
                     level += 1
                     reset_value()
+                #exit button, end program when clicked
                 if exit_button_rect.collidepoint(event.pos) and game_end:
                     running = False
+                #play again button, start again the same run
                 if play_again_button_rect.collidepoint(event.pos) and test_passed == False and game_end:
                     reset_value()
                     player.add(Eagle(level))
-
+                    
+    #grade level showed on the first scene
     match level:
         case 1:
             grade_level = "9th"
@@ -613,12 +641,12 @@ while running:
         case 4:
             grade_level = "12th"
 
-    
+    #to set the game to end when timer is 0
     if timer <= 0:
         game_scene =2
         game_end = True
 
-
+    # showing scene based on game_scene
     if game_scene == 0:
         if introduce_scene == 0:
             screen.blit(start_scene, (0,0))
