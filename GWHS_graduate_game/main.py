@@ -20,16 +20,20 @@ school_stuff= ["document", "pencil", "clipboard", "to_do_list"]
 class Eagle(pygame.sprite.Sprite):
     def __init__(self, level = 1):
         super().__init__()
-        '''self.image_idle = "assets/main_idle.png"
+        ''' load animation sprites (not used)
+        self.image_idle = "assets/main_idle.png"
         self.image_walk_1 ="assets/main_walk_1.png"
         self.image_walk_2 ="assets/main_walk_2.png"
         self.image_jump ="assets/main_jump.png"
         self.image_descend  ="assets/main_descend.png"'''
+
+        #main sprites
         self.image_eagle_1 = "assets/eagle_1.png"
         self.image_eagle_2 = "assets/eagle_2.png"
         self.image_eagle_3 = "assets/eagle_3.png"
         self.image_eagle_4 = "assets/eagle_4.png"
 
+        #skill control variables
         self.can_double_jump = False
         self.can_glide = False
         self.can_shoot = False
@@ -47,6 +51,7 @@ class Eagle(pygame.sprite.Sprite):
             case 4:
                 self.show_image = self.image_eagle_4
 
+        #set image and position when create
         self.image= pygame.image.load(self.show_image).convert_alpha()
         self.rect = self.image.get_rect(midbottom = (100, player_y_pos))
         self.gravity = 0
@@ -55,20 +60,20 @@ class Eagle(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
         keys_released = pygame.key.get_just_released()
         if keys[pygame.K_UP]:
-                if not self.jumped:  
+                if not self.jumped:
+                    #normal jump handle
                     if self.rect.bottom >= player_y_pos:
                         self.gravity = -self.jump_height
                         if level >=3:
                             self.can_glide = True
+                    #double Jump handle
                     elif self.can_double_jump:
                         self.gravity = -18
                         self.can_double_jump = False
                         self.can_glide = True
                     self.jumped = True
         if keys[pygame.K_DOWN]:
-            '''self.show_image = self.image_descend
-            self.image= pygame.image.load(self.show_image).convert_alpha()
-            self.rect = self.image.get_rect(midbottom = (100, player_y_pos))'''
+            #check can_glide, if true make player fall slowly
             if self.can_glide:
                 self.gravity = 2.5
                 self.rect.y += self.gravity
