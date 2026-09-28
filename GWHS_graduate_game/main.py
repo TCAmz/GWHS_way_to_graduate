@@ -61,35 +61,34 @@ class Eagle(pygame.sprite.Sprite):
         keys_released = pygame.key.get_just_released()
         if keys[pygame.K_UP]:
                 if not self.jumped:
-                    #normal jump handle
+                    #normal jump handle on Up arrown key pressed 
                     if self.rect.bottom >= player_y_pos:
                         self.gravity = -self.jump_height
                         if level >=3:
                             self.can_glide = True
-                    #double Jump handle
+                    #double Jump handle on Up arrown key pressed se
                     elif self.can_double_jump:
                         self.gravity = -18
                         self.can_double_jump = False
-                        self.can_glide = True
+                        if level >=3:
+                            self.can_glide = True
                     self.jumped = True
         if keys[pygame.K_DOWN]:
-            #check can_glide, if true make player fall slowly
+            #check can_glide, if true make player falls slowly while holding Down arrow key 
             if self.can_glide:
                 self.gravity = 2.5
                 self.rect.y += self.gravity
         if keys[pygame.K_SPACE]:
+            #shoot out a feather on Space pressed
             if self.can_shoot:
                 shoot_feather()
                 self.can_shoot = False
-        
-        if keys_released[pygame.K_DOWN]:
-            '''self.image= pygame.image.load(self.show_image).convert_alpha()
-            self.rect = self.image.get_rect(midbottom = (100, player_y_pos))'''
-            pass
         if keys_released[pygame.K_UP]:
             self.jumped = False
     def animation_handle(self):
-        '''self.image= pygame.image.load(self.show_image).convert_alpha()
+        ''' code to handle animation if there is
+        
+        self.image= pygame.image.load(self.show_image).convert_alpha()
         if self.rect.bottom < player_y_pos:
             self.show_image = self.image_jump
         else:
@@ -109,17 +108,20 @@ class Eagle(pygame.sprite.Sprite):
             if level >=2:
                 self.can_double_jump = True
     def update(self):
+        #run this in loop to update player
         self.player_input()
         self.apply_gravity()
         self.animation_handle()
 
 class Stuff(pygame.sprite.Sprite):
     def __init__(self, is_distraction = False, speed = 10, highest_y = 250, school = school_stuff, distract = distract_stuff):
+        #is_distraction use to decide which item will be spawned, if true distractions stuff will spawn, if false school stuff will spawn
         super().__init__()
         self.start_x = random.randint(1600, 1800)
         self.start_y = random.randint(player_y_pos-highest_y, player_y_pos-30)
         self.is_distraction = is_distraction
         self.speed = speed
+        #random assign item to random_stuff value
         if is_distraction:
             self.random_stuff = distract[random.randint(0, len(distract)-1)]
         elif not is_distraction:
@@ -128,6 +130,7 @@ class Stuff(pygame.sprite.Sprite):
         self.image =pygame.image.load(self.image_path).convert_alpha() 
         self.rect = self.image.get_rect(center=(self.start_x,self.start_y))
     def update(self):
+        #run this in loop to update player
         self.rect.x -= self.speed
         self.destroy()
     def destroy(self):
@@ -149,6 +152,7 @@ class Feather(pygame.sprite.Sprite):
         player.sprite.can_shoot = True
 
 class Barrier(pygame.sprite.Sprite):
+    #create barrier
     def __init__(self):
         super().__init__()
         self.text_list = ["Service\nLearning\nProject", "23.5\nCredits","Keystone\nExam", "CTE"]
