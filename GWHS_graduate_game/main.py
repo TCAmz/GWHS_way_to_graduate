@@ -495,7 +495,7 @@ barrier_group = pygame.sprite.Group()
 quote_group = pygame.sprite.Group()
 
 #load assets
-bg_sky = pygame.image.load("assets/frontside_1.png").convert()
+bg_sky = pygame.image.load("assets/school_side.png").convert()
 bg_ground = pygame.image.load("assets/ground.png").convert()
  
 start_scene = pygame.image.load("assets/start_scene.png").convert()
